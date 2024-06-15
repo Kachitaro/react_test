@@ -14,7 +14,8 @@ export const Chessboard = () => {
           value={board}
           onChange={(e) => setBoard(+e.target.value)}
         />
-        <button onClick={() => setChess(board)}>Set</button>
+         <button onClick={() => setChess(board)}>Set</button>
+          <button onClick={() => setChess(0)}>Reset</button>
       </div>
       <div>
         <Checkerboard board={chess} />
