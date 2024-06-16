@@ -8,7 +8,7 @@ export const Square = (props: SquareProps) => {
   return (
     <button
       onClick={handleClick}
-      style={{ width: "50px", height: "50px" }}>
+      style={{ width: "50px", height: "50px", textAlign: "center" }}>
       {value}
     </button>
   );

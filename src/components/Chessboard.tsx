@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Checkerboard } from "./Checkerboard";
 
 export const Chessboard = () => {
-  const [board, setBoard] = useState(3);
+  const [board, setBoard] = useState(0);
   const [chess, setChess] = useState<number>(0);
 
   return (
@@ -14,11 +14,10 @@ export const Chessboard = () => {
           value={board}
           onChange={(e) => setBoard(+e.target.value)}
         />
-         <button onClick={() => setChess(board)}>Set</button>
-          <button onClick={() => setChess(0)}>Reset</button>
+        <button onClick={() => setChess(board)}>Set</button>
       </div>
       <div>
-        <Checkerboard board={chess} />
+        <Checkerboard boardSize={chess} />
       </div>
     </div>
   );
