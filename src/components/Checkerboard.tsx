@@ -1,5 +1,12 @@
 import { useState } from "react";
 import { Square } from "./Square";
+import {
+  useCalculateWinner,
+  usePerson,
+  usePlayer,
+  useWiningLine,
+} from "../hooks";
+import { useGame } from "./Game";
 
 type CheckerboardProps = {
   boardSize: number;
@@ -8,96 +15,43 @@ type CheckerboardProps = {
 export const Checkerboard = (props: CheckerboardProps) => {
   const { boardSize } = props;
   const board = Math.pow(boardSize, 2);
-  const [round , setRound] = useState(1);
-  const [xIsNext, setXIsNext] = useState(true);
+  const lines = useWiningLine(boardSize);
+  const [round, setRound] = useState(1);
   const [squares, setSquares] = useState(Array(board).fill(null));
+  const [playerOne, setPlayerOne] = usePerson("X");
+  const [playerTwo, setPlayerTwo] = usePerson("O");
+  const { currentPlayer, togglePlayer, declareWinner } = usePlayer(playerOne);
+  const winner = useCalculateWinner(lines, squares);
+  const { result, saveResult } = useGame();
 
   const handleClick = (index: number) => {
-    if (squares[index]) {
-      return;
+    if (currentPlayer === playerOne) {
+      const newSquares = setPlayerOne(squares, index);
+      if (newSquares) setSquares(newSquares);
+    } else if (currentPlayer === playerTwo) {
+      const newSquares = setPlayerTwo(squares, index);
+      if (newSquares) setSquares(newSquares);
     }
-    const nextSquares = squares.slice();
-    if (xIsNext) {
-      nextSquares[index] = "X";
-    } else {
-      nextSquares[index] = "O";
-    }
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    togglePlayer(playerOne, playerTwo);
   };
-
-  const calculateWinner = (squares: number[]) => {
-    const lines = generateWinningLines(boardSize);
-    for (let i = 0; i < lines.length; i++) {
-      const [a, ...rest] = lines[i];
-      if (squares[a] && rest.every((index) => squares[a] === squares[index])) {
-        return squares[a];
-      }
-    }
-    return null;
-  };
-
-  const generateWinningLines = (boardSize: number) => {
-    const lines = [];
-    const winLength = boardSize < 5 ? boardSize : 5;
-    // Đường thắng ngang
-    for (let row = 0; row < boardSize; row++) {
-      for (let col = 0; col <= boardSize - winLength; col++) {
-        const line = [];
-        for (let i = 0; i < winLength; i++) {
-          line.push(row * boardSize + col + i);
-        }
-        lines.push(line);
-      }
-    }
-    // Đường thắng dọc
-    for (let col = 0; col < boardSize; col++) {
-      for (let row = 0; row <= boardSize - winLength; row++) {
-        const line = [];
-        for (let i = 0; i < winLength; i++) {
-          line.push((row + i) * boardSize + col);
-        }
-        lines.push(line);
-      }
-    }
-    // Đường thắng chéo chính
-    for (let row = 0; row <= boardSize - winLength; row++) {
-      for (let col = 0; col <= boardSize - winLength; col++) {
-        const line = [];
-        for (let i = 0; i < winLength; i++) {
-          line.push((row + i) * boardSize + col + i);
-        }
-        lines.push(line);
-      }
-    }
-    // Đường thắng chéo phụ
-    for (let row = 0; row <= boardSize - winLength; row++) {
-      for (let col = winLength - 1; col < boardSize; col++) {
-        const line = [];
-        for (let i = 0; i < winLength; i++) {
-          line.push((row + i) * boardSize + col - i);
-        }
-        lines.push(line);
-      }
-    }
-    return lines;
-  };
-  const winner = calculateWinner(squares);
 
   const handleReset = () => {
     if (winner) {
-      localStorage.setItem(`round_${round}`, JSON.stringify(winner));
+      declareWinner(winner);
+      saveResult(winner);
     } else {
-      localStorage.setItem(`round_${round}`, JSON.stringify("Draw"));
+      saveResult("Draw");
     }
     setSquares(Array(board).fill(null));
-    setXIsNext(true);
     setRound(round + 1);
   };
   return (
     <>
       <div>
-        <button style={{ marginTop: "5px" }} onClick={handleReset}>
+        <button
+          disabled={!boardSize}
+          style={{ marginTop: "5px" }}
+          onClick={handleReset}>
           Reset
         </button>
       </div>
@@ -107,30 +61,59 @@ export const Checkerboard = (props: CheckerboardProps) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          gap: "20px",
         }}>
-        <table>
-          <tbody>
-            {Array.from({ length: boardSize }).map((_, i) => {
-              const indexRow = i + 1;
-              return (
-                <tr key={indexRow} style={{ display: "flex" }}>
-                  {Array.from({ length: boardSize }).map((_, j) => {
-                    const indexCol = j + 1;
-                    const index =
-                      indexRow * boardSize - boardSize + indexCol - 1;
-                    return (
-                      <Square
-                        key={indexCol}
-                        value={squares[index]}
-                        handleClick={() => handleClick(index)}
-                      />
-                    );
-                  })}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
+          <table>
+            <tbody>
+              {Array.from({ length: boardSize }).map((_, i) => {
+                const indexRow = i + 1;
+                return (
+                  <tr key={indexRow} style={{ display: "flex" }}>
+                    {Array.from({ length: boardSize }).map((_, j) => {
+                      const indexCol = j + 1;
+                      const index =
+                        indexRow * boardSize - boardSize + indexCol - 1;
+                      return (
+                        <Square
+                          key={indexCol}
+                          value={squares[index]}
+                          handleClick={() => handleClick(index)}
+                        />
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <h4>Result</h4>
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th></th>
+                <th>Winner</th>
+              </tr>
+            </thead>
+            <tbody>
+              {result?.map((item: string, index: number) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <th></th>
+                  <td>{item}</td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </>
   );

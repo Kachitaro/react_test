@@ -1,2 +1,2 @@
-export * from './Game'
+export * from '../components/Game'
 export * from './NewPage'

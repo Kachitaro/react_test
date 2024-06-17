@@ -50,6 +50,7 @@ function App() {
   const personName = ["Tài", "Hà", "Vi"];
   const colors = ["Đỏ", "Xanh", "Vàng"];
 
+  // eslint-disable-next-line no-undef
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ name, email });
