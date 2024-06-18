@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 export const ShowData = ({ n }: { n: number }) => {
   const nums = useMemo(() => {
-    console.log("Calculating nums");
     const result: number[] = [];
     if (n > 0) result.push(1);
     if (n > 5) result.push(5);
@@ -15,7 +14,6 @@ export const ShowData = ({ n }: { n: number }) => {
   }, [n]);
 
   const fibonacciResults = useMemo(() => {
-    console.log("Calculating fibonacci");
     const results = {} as Record<number, number>;
     for (const num of nums) {
       let a = 0,

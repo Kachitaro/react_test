@@ -1,6 +1,11 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import "./App.css";
-import { ShowData } from "./components";
+import {
+  ShowData,
+  TextInput,
+  RadioButtonGroups,
+  CheckboxInput,
+} from "./components";
 import { redirect, useNavigate } from "react-router-dom";
 
 function Button({
@@ -44,30 +49,45 @@ function App() {
   const [count, setCount] = useState(0);
   const [person, setPerson] = useState("");
   const [color, setColor] = useState("");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [info, setInfo] = useState({
+    name: "",
+    email: "",
+    text: "",
+    gender: "",
+    notify: "",
+  });
   const navigator = useNavigate();
   const personName = ["Tài", "Hà", "Vi"];
   const colors = ["Đỏ", "Xanh", "Vàng"];
 
+  const items: { value: string; label: string }[] = [
+    { value: "male", label: "Nam" },
+    { value: "female", label: "Nữ" },
+  ];
+
   // eslint-disable-next-line no-undef
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ name, email });
+    console.log(info);
+  };
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, value, checked, type } = e.target;
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      [id]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleNext = () => {
     navigator("/contacts");
     return redirect("/contacts");
-  }
+  };
 
   const handleGame = () => {
     navigator("/game");
     return redirect("/game");
-  }
-
-  // const units = useGetUnist();
-  // console.log(units);
+  };
 
   return (
     <>
@@ -99,30 +119,38 @@ function App() {
       {person && color && <PersonChoice person={person} selected={color} />}
       <br />
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            required
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+        <TextInput source="name" type="text" label="Name" onChange={onChange} />
+        <TextInput
+          source="email"
+          type="email"
+          label="Email"
+          onChange={onChange}
+        />
+        <TextInput
+          source="phone"
+          type="tel"
+          label="Phone Number"
+          onChange={onChange}
+        />
+        <TextInput source="text" type="text" label="Text" onChange={onChange} />
+        <RadioButtonGroups
+          source="gender"
+          label="Gender"
+          items={items}
+          values={info.gender}
+          onChange={onChange}
+        />
+        <CheckboxInput
+          value={info.notify}
+          source={"notify"}
+          label={"Notification Mail"}
+          onChange={onChange}
+        />
         <button type="submit">Submit</button>
       </form>
       <button onClick={handleNext}>Next Page</button>
       <button onClick={() => setCount(count + 1)}>Increase</button>
-      <button onClick={handleGame}>Đánh cờ Caro</button> 
+      <button onClick={handleGame}>Đánh cờ Caro</button>
       <ShowData n={count} />
     </>
   );
