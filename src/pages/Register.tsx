@@ -1,3 +1,4 @@
+
 import { Form, TextInputForm } from "../components";
 
 export const Register = () => {

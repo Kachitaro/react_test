@@ -4,7 +4,7 @@ import {
   FieldValues,
   FormProvider,
 } from "react-hook-form";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 type FormProps = {
   onSubmit: SubmitHandler<FieldValues>;
@@ -14,6 +14,13 @@ type FormProps = {
 export const Form = (props: FormProps) => {
   const { onSubmit, children } = props;
   const methods = useForm();
+  const { handleSubmit, reset, formState } = methods;
+
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset();
+    }
+  }, [formState.isSubmitSuccessful, reset]);
 
   return (
     <FormProvider {...methods}>
@@ -24,13 +31,9 @@ export const Form = (props: FormProps) => {
           justifyItems: "center",
           gap: "10px",
         }}
-        onSubmit={methods.handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(onSubmit)}>
         {children}
-        <button type="submit" 
-        // onClick={() => methods.reset()}
-        >
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
     </FormProvider>
   );
