@@ -1,6 +1,16 @@
 import { useFormContext } from "react-hook-form";
-import { InputPros } from "../Input/TextInput";
 import { messageError } from "../../utils";
+
+export type InputPros = {
+  source: string;
+  type: "text" | "email" | "tel" | "password";
+  placeholder?: string;
+  onChange?: any;
+  label: string;
+  pattern?: string;
+  register?: any;
+  validate?: any;
+};
 
 export const TextInputForm = (props: InputPros) => {
   const { source, placeholder, label, type, validate } = props;
