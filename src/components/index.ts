@@ -1,5 +1,5 @@
 export * from "./ShowData";
-export * from "./Checkerboard";
+export * from "./Game";
 export * from "../pages/Chessboard";
 export * from "./Square";
 export * from "./Input";

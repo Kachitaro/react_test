@@ -27,11 +27,11 @@ export const RadioButtonGroups = (props: RadioButtonGroupsProps) => {
                 name={source}
                 type="radio"
                 value={value}
-                id={source}
+                id={source + value}
                 checked={values === value}
                 onChange={onChange}
               />
-              <label htmlFor={source}>{label}</label>
+              <label htmlFor={source + value}>{label}</label>
             </div>
           );
         })}

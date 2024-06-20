@@ -6,7 +6,7 @@ import {
   RadioButtonGroups,
   CheckboxInput,
 } from "./components";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Button({
   value,
@@ -72,21 +72,23 @@ function App() {
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, value, checked, type } = e.target;
+    const { value, checked, type, name } = e.target;
     setInfo((prevInfo) => ({
       ...prevInfo,
-      [id]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleNext = () => {
-    navigator("/contacts");
-    return redirect("/contacts");
+    return navigator("/contacts");
   };
 
   const handleGame = () => {
-    navigator("/game");
-    return redirect("/game");
+    return navigator("/game");
+  };
+
+  const handleNextForm = () => {
+    return navigator("/form");
   };
 
   return (
@@ -148,9 +150,12 @@ function App() {
         />
         <button type="submit">Submit</button>
       </form>
-      <button onClick={handleNext}>Next Page</button>
-      <button onClick={() => setCount(count + 1)}>Increase</button>
-      <button onClick={handleGame}>Đánh cờ Caro</button>
+      <div style={{ display: 'flex', gap: '5px'}}>
+        <button onClick={handleNext}>Next Page</button>
+        <button onClick={handleNextForm}>Next Page React Hook Form</button>
+        <button onClick={() => setCount(count + 1)}>Increase</button>
+        <button onClick={handleGame}>Đánh cờ Caro</button>
+      </div>
       <ShowData n={count} />
     </>
   );

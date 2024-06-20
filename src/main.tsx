@@ -3,8 +3,7 @@ import App from "./App.tsx";
 import "./index.css";
 import { StrictMode } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { NewPage } from "./pages";
-import { Chessboard } from "./pages/Chessboard.tsx";
+import { Form, NewPage, Chessboard } from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "game",
     element: <Chessboard />,
+  },
+  {
+    path: "form",
+    element: <Form />,
   },
 ]);
 

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Checkerboard } from "../components/Checkerboard";
-import { Game } from ".";
+import { Game, Checkerboard } from "../components";
 
 export const Chessboard = () => {
   const [board, setBoard] = useState(3);

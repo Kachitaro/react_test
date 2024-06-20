@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Square } from "./Square";
+import { Square } from "../Square";
 import {
   useCalculateWinner,
   usePerson,
   usePlayer,
   useWiningLine,
-} from "../hooks";
-import { useGame } from "./Game";
+} from "../../hooks";
+import { useGame } from "../Game";
 
 type CheckerboardProps = {
   boardSize: number;

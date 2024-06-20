@@ -1,10 +1,12 @@
-type InputPros = {
+export type InputPros = {
   source: string;
   type: "text" | "email" | "tel" | "password";
   placeholder?: string;
-  onChange: any;
+  onChange?: any;
   label: string;
   pattern?: string;
+  register?: any;
+  validate?: any;
 };
 
 export const TextInput = (props: InputPros) => {
