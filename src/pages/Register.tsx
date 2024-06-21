@@ -1,4 +1,3 @@
-
 import { Form, TextInputForm } from "../components";
 
 export const Register = () => {
@@ -16,18 +15,23 @@ export const Register = () => {
           type={"text"}
           validate={{
             required: true,
-            validate: (value: string) => {
-              if (value === "a") {
-                return "Username must be aaaaa";
-              }
-            },
           }}
         />
         <TextInputForm
           source="email"
           label="Email"
           type={"email"}
-          validate={{ required: true }}
+          validate={{
+            required: true,
+          }}
+        />
+        <TextInputForm
+          source="address"
+          label="Address"
+          type={"text"}
+          validate={{
+            required: true,
+          }}
         />
       </Form>
     </div>
