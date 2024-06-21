@@ -4,7 +4,7 @@ import {
   FieldValues,
   FormProvider,
 } from "react-hook-form";
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 
 type FormProps = {
@@ -17,15 +17,15 @@ export const Form = (props: FormProps) => {
   const { onSubmit, redirect, children } = props;
   const methods = useForm();
   const navigator = useNavigate();
-  const { handleSubmit, reset, formState } = methods;
-  const { isSubmitted } = formState;
+  const { handleSubmit, reset } = methods;
 
-  useEffect(() => {
-    if (redirect && isSubmitted) {
+  const action = (data: object) => {
+    onSubmit(data);
+    if (redirect) {
       navigator(redirect);
     }
     reset();
-  }, [isSubmitted, redirect, reset, navigator]);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -36,7 +36,7 @@ export const Form = (props: FormProps) => {
           justifyItems: "center",
           gap: "10px",
         }}
-        onSubmit={handleSubmit(onSubmit)}>
+        onSubmit={handleSubmit(action)}>
         {children}
         <button type="submit">Submit</button>
       </form>
