@@ -16,6 +16,7 @@ export const Register = () => {
           validate={{
             required: true,
           }}
+          defaultValue={"admin"}
         />
         <TextInputForm
           source="email"

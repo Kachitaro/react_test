@@ -5,7 +5,7 @@ import {
   FormProvider,
 } from "react-hook-form";
 import { ReactNode } from "react";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type FormProps = {
   onSubmit: SubmitHandler<FieldValues>;
@@ -18,9 +18,8 @@ export const Form = (props: FormProps) => {
   const methods = useForm();
   const { handleSubmit, reset } = methods;
   const navigate = useNavigate();
-
   const handleAction = (value: object) => {
-    onSubmit(value);
+    onSubmit(value)
     if (redirect) navigate(redirect);
     reset();
   };

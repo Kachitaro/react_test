@@ -3,7 +3,7 @@ import { InputPros } from "../Input/TextInput";
 import { messageError } from "../../utils";
 
 export const TextInputForm = (props: InputPros) => {
-  const { source, placeholder, label, type, validate } = props;
+  const { source, placeholder, label, type, validate, defaultValue } = props;
   const {
     register,
     formState: { errors },
@@ -20,6 +20,7 @@ export const TextInputForm = (props: InputPros) => {
         <label htmlFor={source}>{label}</label>
         <input
           {...register(source, validate)}
+          defaultValue={defaultValue}
           placeholder={placeholder}
           type={type}
           id={source}

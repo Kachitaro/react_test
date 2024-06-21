@@ -7,6 +7,7 @@ export type InputPros = {
   pattern?: string;
   register?: any;
   validate?: any;
+  defaultValue?: string;
 };
 
 export const TextInput = (props: InputPros) => {
