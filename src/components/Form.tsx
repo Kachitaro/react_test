@@ -5,22 +5,27 @@ import {
   FormProvider,
 } from "react-hook-form";
 import { ReactNode, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 type FormProps = {
   onSubmit: SubmitHandler<FieldValues>;
   children: ReactNode;
+  redirect?: string;
 };
 
 export const Form = (props: FormProps) => {
-  const { onSubmit, children } = props;
+  const { onSubmit, redirect, children } = props;
   const methods = useForm();
+  const navigator = useNavigate();
   const { handleSubmit, reset, formState } = methods;
+  const { isSubmitted } = formState;
 
   useEffect(() => {
-    if (formState.isSubmitSuccessful) {
-      reset();
+    if (redirect && isSubmitted) {
+      navigator(redirect);
     }
-  }, [formState.isSubmitSuccessful, reset]);
+    reset();
+  }, [isSubmitted, redirect, reset, navigator]);
 
   return (
     <FormProvider {...methods}>
